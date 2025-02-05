@@ -1,50 +1,126 @@
-# React + TypeScript + Vite
+# React with TypeScript and Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project provides a modern development environment for React applications, utilizing TypeScript as the type system and Vite as the build tool. The configuration includes support for Hot Module Replacement (HMR), optimized ESLint rules, and continuous integration with GitHub Actions.
 
-Currently, two official plugins are available:
+## Main Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 Technologies used:
 
-## Expanding the ESLint configuration
+- React 18.x
+- TypeScript
+- Vite 4.x
+- ESLint with advanced configuration
+- GitHub Pages for automatic deployment
+- GitHub Actions for CI/CD
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Environment Setup
 
-- Configure the top-level `parserOptions` property like this:
+To initialize the project:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npm create vite@latest . -- --template react-ts
+cd .
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### ESLint Configuration
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+The project uses an optimized ESLint configuration to ensure code quality:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
+```json
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
   },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "plugin:react/jsx-runtime"
+  ],
+  "parserOptions": {
+    "project": ["./tsconfig.json"],
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
-})
+  "rules": {
+    "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true }],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ]
+      }
+    ]
+  }
+}
 ```
+
+## Scripts Available
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint 'src/**/*.ts{,x}'",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  }
+}
+```
+
+## Continuous Integration with GitHub Actions
+
+The project implements an automated CI/CD pipeline that runs tests and deployment:
+
+```yaml
+name: Continuous Integration and Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: node:20
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "roger.faria.outlook.com"
+          git config --global user.name "rfaria-dev"
+          npx gh-pages -d dist -r https://x-access-token:${GITHUB_TOKEN}@github.com/rfaria-dev/ci-cd-demo-with-github-actions.github.io.git
+```
+
+## Project URL
+
+🔗 [https://rfaria-dev.github.io/ci-cd-demo-with-github-actions.github.io/](https://rfaria-dev.github.io/ci-cd-demo-with-github-actions.github.io/)
