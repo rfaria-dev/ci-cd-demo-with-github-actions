@@ -28,6 +28,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <p className="read-the-docs">
+        This is the first auto deployment with Github Actions and Github Pages.
+      </p>
     </>
   );
 }
