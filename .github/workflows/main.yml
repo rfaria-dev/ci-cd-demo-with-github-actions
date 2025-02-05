@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Continuous Integration and Deployment
 
 on:
   push:
@@ -18,3 +18,18 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "roger.faria.outlook.com"
+          git config --global user.name "rfaria-dev"
+          npx gh-pages -d dist -r https://x-access-token:${GITHUB_TOKEN}@github.com/rfaria-dev/ci-cd-demo-with-github-actions.github.io.git
