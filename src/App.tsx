@@ -31,6 +31,9 @@ function App() {
       <p className="read-the-docs">
         This is the first auto deployment with Github Actions and Github Pages.
       </p>
+      <p className="read-the-docs">
+        This is the second auto deployment with Github Actions and Github Pages.
+      </p>
     </>
   );
 }
